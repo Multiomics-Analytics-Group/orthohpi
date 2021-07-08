@@ -1,0 +1,33 @@
+{
+ // See https://go.microsoft.com/fwlink/?LinkId=733558
+ // for the documentation about the tasks.json format
+ "version": "2.0.0",
+ "tasks": [
+  {
+   "label": "rollup phluid",
+   "type": "shell",
+   "command": "rollup --input ../phluid/phluid.js --file lib/js/phluid.bundle.js --format iife",
+   "problemMatcher": [],
+   "group": "build"
+  },
+  {
+   "label": "rollup OrthoHPI",
+   "type": "shell",
+   "command": "rollup --input lib/js/orthohpi.js --file lib/js/orthohpi.bundle.js --format iife",
+   "problemMatcher": [],
+   "group": "build"
+  },
+  {
+   "label": "Build",
+   "dependsOn": [
+    "rollup phluid",
+    "rollup OrthoHPI"
+   ],
+   "problemMatcher": [],
+   "group": {
+    "kind": "build",
+    "isDefault": true
+   }
+  }
+ ]
+}

@@ -1,0 +1,10 @@
+.orthohpi {
+ width:80vw;
+ height:80vw;
+}
+
+.cytoscape {
+ width: 100%;
+ height: 100%;
+ display: block;
+}

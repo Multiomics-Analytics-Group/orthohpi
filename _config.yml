@@ -2,4 +2,5 @@ exclude:
  - lib/js/*
 
 include:
- - lib/js/*.bundle.js
+ - lib/js/phluid.bundle.js
+ - lib/js/orthohpi.bundle.js

@@ -6,19 +6,22 @@
   {
    "label": "rollup phluid",
    "type": "shell",
-   "command": "rollup --input ../phluid/phluid.js --file lib/js/phluid.bundle.js --format iife",
+   "command": "rollup --input ../phluid/phluid.js --file lib/js-build/phluid.bundle.js --format iife",
    "problemMatcher": [],
    "group": "build"
   },
   {
    "label": "rollup OrthoHPI",
    "type": "shell",
-   "command": "rollup --input lib/js/orthohpi.js --file lib/js/orthohpi.bundle.js --format iife",
+   "command": "rollup --input lib/js/orthohpi.js --file lib/js-build/orthohpi.bundle.js --format iife",
    "problemMatcher": [],
    "dependsOn": [
-    "rollup phluid",
+    "rollup phluid"
    ],
-   "group": "build",
+   "group": {
+    "kind": "build",
+    "isDefault": true
+   },
    "isDefault": true
   }
  ]

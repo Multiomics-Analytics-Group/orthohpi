@@ -15,19 +15,11 @@
    "type": "shell",
    "command": "rollup --input lib/js/orthohpi.js --file lib/js/orthohpi.bundle.js --format iife",
    "problemMatcher": [],
-   "group": "build"
-  },
-  {
-   "label": "Build",
    "dependsOn": [
     "rollup phluid",
-    "rollup OrthoHPI"
    ],
-   "problemMatcher": [],
-   "group": {
-    "kind": "build",
-    "isDefault": true
-   }
+   "group": "build",
+   "isDefault": true
   }
  ]
 }

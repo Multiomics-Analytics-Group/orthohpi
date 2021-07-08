@@ -1,0 +1,5 @@
+exclude: 
+ - lib/js/*
+
+include:
+ - lib/js/*.bundle.js

@@ -11,12 +11,22 @@
    "group": "build"
   },
   {
+   "label": "redoc-cli bundle api doc",
+   "type": "shell",
+   "command": "redoc-cli bundle doc/jensenlab/api.yaml --output doc/jensenlab/api.htm",
+   "problemMatcher": [],
+   "dependsOn": [
+    "rollup phluid"
+   ],
+   "group": "build"
+  },
+  {
    "label": "rollup OrthoHPI",
    "type": "shell",
    "command": "rollup --input lib/js/orthohpi.js --file lib/js-build/orthohpi.bundle.js --format iife",
    "problemMatcher": [],
    "dependsOn": [
-    "rollup phluid"
+    "redoc-cli bundle api doc"
    ],
    "group": {
     "kind": "build",

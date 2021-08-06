@@ -1,0 +1,212 @@
+openapi: 3.0.0
+info:
+  title: Jensen Lab Host-Pathogen Interaction API
+  description: Incomplete!
+  version: a1
+servers:
+  - url: https://api.jensenlab.org
+    description: JensenLab
+paths:
+  /network:
+    post:
+      summary: Returns a list of proteins (nodes) and interactions (edges)
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/network-request-entities'
+                - $ref: '#/components/schemas/network-request-organism'
+      responses:
+        '200':    # OK
+          $ref: '#/components/responses/network'
+    get:
+      summary: Returns a list of proteins (nodes) and interactions (edges)
+      parameters:
+        - in: query
+          name: values
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/network-request-entities'
+              - $ref: '#/components/schemas/network-request-organism'
+          description: See POST parameters 
+          style: form
+          explode: true
+      responses:
+        '200':    # OK
+          $ref: '#/components/responses/network'
+  /integration:
+    post:
+      summary: Returns a list of proteins matching the filters provided, integrated over all evidence types
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/evidence-request'
+      responses:
+        '200':    # OK
+          $ref: '#/components/responses/evidence'
+    get:
+      summary: Returns a list of proteins matching the filters provided, integrated over all evidence types
+      parameters:
+        - in: query
+          name: values
+          schema:
+            $ref: '#/components/schemas/evidence-request'
+          description: See POST parameters 
+          style: form
+          explode: true
+      responses:
+        '200':    # OK
+          $ref: '#/components/responses/evidence'
+components:
+  schemas:
+    network-request-shared:
+      type: object
+      properties:
+        additional:
+          type: integer
+        filter:
+          type: string
+        score:
+          $ref: '#/components/schemas/confidence-score'
+        format:
+          $ref: '#/components/schemas/format'
+    network-request-entities:
+      allOf:
+        - type: object
+          required: [entities]
+          properties:
+            entities:
+              $ref: '#/components/schemas/entities'
+        - $ref: '#/components/schemas/network-request-shared'
+    network-request-organism:
+      allOf:
+        - type: object
+          required: [organism]
+          properties:
+            organism:
+              $ref: '#/components/schemas/organism'
+        - $ref: '#/components/schemas/network-request-shared'
+
+    evidence-request:
+      type: object
+      required: [type1, id1]
+      properties:
+        type1:
+          $ref: '#/components/schemas/tagger-type'
+        id1:
+          type: string
+        type2:
+          $ref: '#/components/schemas/tagger-type'
+        id2:
+          type: string
+        limit:
+          $ref: '#/components/schemas/limit'
+        format:
+          $ref: '#/components/schemas/format'
+    entities:
+      type: string
+      description: Line Feed-separated list of ids in format {Taxonomy ID}.{Protein ID}
+      pattern: '^\d{1,7}\..+$'
+    organism:
+      type: integer
+      description: Taxonomy ID
+      minimum: 1
+      maximum: 9999999
+    limit:
+      type: integer
+      description: A limit on the number of returned results
+    format:
+      type: string
+      description: Return format
+      enum: [json]
+    tagger-type:
+      type: integer
+      minimum: -36
+      maximum: 9999999
+    confidence-score:
+      type: number
+      description: Confidence score
+      minimum: 0
+      maximum: 1
+    star-score:
+      type: number
+      description: Star score
+      minimum: 0
+      maximum: 5
+    edge:
+      type: object
+      properties:
+        scores:
+          $ref: '#/components/schemas/stringdb-scores'
+        source: 
+          type: string
+        target: 
+          type: string
+    node:
+      type: object
+      properties:
+        '@id':
+          type: string
+        canonical: 
+          type: string
+        name: 
+          type: string
+        description: 
+          type: string
+        image: 
+          type: string
+        'stringdb::sequence':
+          type: string
+        'stringdb::structures':
+          type: array
+          items:
+            type: string
+      additionalProperties:
+        $ref: '#/components/schemas/star-score'
+    stringdb-scores:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/confidence-score'
+    protein:
+      type: object
+      properties:
+        name:
+          type: string
+        score: 
+          $ref: '#/components/schemas/star-score'
+  responses:
+    network:
+      description: A JSON array of a response object (comprising an array of edges and an array of nodes) and a boolean indicating if all results were returned
+      content:
+        application/json:
+          schema: 
+            type: array
+            items:
+              oneOf:
+                - type: object
+                  properties:
+                    edges:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/edge'
+                    nodes:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/node'
+                - type: boolean
+    evidence:
+      description: A JSON dictionary of proteins
+      content:
+        application/json:
+          schema: 
+            type: object
+            additionalProperties:
+              $ref: '#/components/schemas/protein'
+              
+        
+        
+        
